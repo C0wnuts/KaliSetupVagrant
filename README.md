@@ -24,3 +24,9 @@ Setup an up to date kali Linux via Vagrant.
 * Geany
 * gdebi
 * Many dependencies
+
+## How to use ?
+[RTFM](https://github.com/C0wnuts/KaliSetupVagrant/wiki/How-to-use)
+
+## Notes :
+The setup can take 10-30 minutes. Then Take a cup, keep cool and enjoy.
