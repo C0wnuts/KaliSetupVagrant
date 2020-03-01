@@ -18,6 +18,16 @@ function gitCloneBulk()
 	git clone --recursive https://github.com/byt3bl33d3r/CrackMapExec /opt/CrackMapExec
 	git clone https://github.com/EmpireProject/Empire.git /opt/Empire
 	git clone https://github.com/byt3bl33d3r/DeathStar /opt/DeathStar
+	git clone https://github.com/mzet-/linux-exploit-suggester.git /opt/privEscTools/linux-exploit-suggester-sh
+	git clone https://github.com/jondonas/linux-exploit-suggester-2.git /opt/privEscTools/linux-exploit-suggester-pl
+	git clone https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git /opt/privEscTools/privilege-escalation-awesome-scripts-suite
+	git clone https://github.com/diego-treitos/linux-smart-enumeration.git /opt/privEscTools/linux-smart-enumeration
+	git clone https://github.com/rebootuser/LinEnum.git /opt/privEscTools/LinEnum
+	git clone https://github.com/AlessandroZ/BeRoot.git /opt/privEscTools/BeRoot
+	git clone https://github.com/sleventyeleven/linuxprivchecker.git /opt/privEscTools/linuxprivchecker
+	git clone https://github.com/pentestmonkey/unix-privesc-check.git /opt/privEscTools/unix-privesc-check
+	git clone https://github.com/TH3xACE/SUDO_KILLER.git /opt/privEscTools/SUDO_KILLER
+	git clone https://github.com/C0wnuts/webExploitPages.git
 }
 
 function runAptGetUpgrade()
@@ -98,6 +108,7 @@ sudo unzip tilix.zip -d /
 sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
 rm tilix.zip
 mkdir /opt/wordlist
+mkdir /opt/privEscTools
 gitCloneBulk
 cd /opt/wordlist
 gzip -d /usr/share/wordlists/rockyou.txt.gz
@@ -130,5 +141,7 @@ echo 'export PATH=$PATH:/root/go/bin' >> /root/.bashrc
 systemctl enable docker
 installApkTool
 changeKeyboard
+sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+chsh -s $(which zsh)
 echo "Reboot machine"
 reboot
