@@ -28,6 +28,7 @@ function gitCloneBulk()
 	git clone https://github.com/pentestmonkey/unix-privesc-check.git /opt/privEscTools/unix-privesc-check
 	git clone https://github.com/TH3xACE/SUDO_KILLER.git /opt/privEscTools/SUDO_KILLER
 	git clone https://github.com/C0wnuts/webExploitPages.git
+	git clone https://github.com/internetwache/GitTools.git /opt/gitTools
 }
 
 function runAptGetUpgrade()
@@ -100,7 +101,7 @@ echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /
 apt-get update
 runAptGetUpgrade
 dpkg --configure -a --force-confnew
-runAptGetInstall "aha xalan geany python-pip golang jq phantomjs gdebi"
+runAptGetInstall "aha xalan geany python-pip golang jq phantomjs gdebi tree keepass2"
 mkdir /opt
 cd /opt
 wget https://github.com/gnunn1/tilix/releases/download/1.9.3/tilix.zip
