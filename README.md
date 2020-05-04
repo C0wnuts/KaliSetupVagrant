@@ -23,6 +23,8 @@ Setup an up to date kali Linux via Vagrant.
 * Tilix
 * Geany
 * gdebi
+* tree
+* keepass2
 * Many dependencies
 
 ## How to use ?
