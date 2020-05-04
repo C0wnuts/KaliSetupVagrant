@@ -17,6 +17,7 @@ Setup an up to date kali Linux via Vagrant.
 * CrackMapExec
 * Empire
 * DeathStare
+* gitTools
 * Docker
 * ApkTool
 * Xalan
