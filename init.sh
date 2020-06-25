@@ -29,6 +29,7 @@ function gitCloneBulk()
 	git clone https://github.com/TH3xACE/SUDO_KILLER.git /opt/privEscTools/SUDO_KILLER
 	git clone https://github.com/C0wnuts/webExploitPages.git
 	git clone https://github.com/internetwache/GitTools.git /opt/gitTools
+	git clone https://github.com/ticarpi/jwt_tool /opt/jwt_tool
 }
 
 function runAptGetUpgrade()
@@ -47,19 +48,22 @@ function runAptGetInstall()
 
 function pipInstallBulk()
 {
-	pip install pipenv 
+	pip install pipenv
+	pip3 install pipenv
+	pip3 install pycryptodomex
 	pip3 install -r /opt/crosslinked/requirements.txt
 	pip install -r /opt/droopescan/requirements.txt
 	pip install -r /opt/Sublist3r/requirements.txt
 	pip install -r /opt/Sudomy/requirements.txt
 	pip3 install -r /opt/Sudomy/requirements.txt
-	pip3 install -r /opt/DeathStarrequirements.txt
+	pip3 install -r /opt/DeathStar/requirements.txt
 	pip install -r /opt/CrackMapExec/cme/thirdparty/impacket/requirements.txt
 }
 
 function changeKeyboard()
 {
 	echo 'setxkbmap fr' >> /root/.bashrc
+	echo 'setxkbmap fr' >> /home/vagrant/.bashrc
 	echo '# KEYBOARD CONFIGURATION FILE' > /etc/default/keyboard
 	echo '' >> /etc/default/keyboard
 	echo '# Consult the keyboard(5) manual page.' >> /etc/default/keyboard
@@ -79,6 +83,49 @@ function installApkTool()
 	mv /opt/apktool_2.4.0.jar /opt/apktool.jar
 	mv /opt/apktool* /usr/local/bin
 	chmod +x /usr/local/bin/apktool*
+}
+
+function installPhantomjs()
+{
+	runAptGetInstall build-essential chrpath libssl-dev libxft-dev
+	runAptGetInstall libfreetype6 libfreetype6-dev
+	runAptGetInstall libfontconfig1 libfontconfig1-dev
+	cd ~
+	export PHANTOM_JS="phantomjs-2.1.1-linux-x86_64"
+	wget https://github.com/Medium/phantomjs/releases/download/v2.1.1/$PHANTOM_JS.tar.bz2
+	tar xvjf $PHANTOM_JS.tar.bz2
+	mv $PHANTOM_JS /usr/local/share
+	ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
+	phantomjs --version
+	echo 'export OPENSSL_CONF=/etc/ssl/' >> /root/.bashrc
+	echo 'export OPENSSL_CONF=/etc/ssl/' >> /home/vagrant/.bashrc
+}
+
+function zshSetup()
+{
+	sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+	chsh -s $(which zsh)
+	mkdir /home/vagrant/.ssh
+	chmod 0700 /home/vagrant/.ssh
+	git clone git://github.com/robbyrussell/oh-my-zsh.git /home/vagrant/.oh-my-zsh
+	chmod 0755 /home/vagrant/.oh-my-zsh
+	cp /home/vagrant/.oh-my-zsh/templates/zshrc.zsh-template /home/vagrant/.zshrc
+	chmod 0755 /home/vagrant/.zshrc
+	chown -R vagrant:vagrant /home/vagrant
+	chsh --shell /bin/zsh vagrant
+
+	sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/' /root/.zshrc
+	sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/' /home/vagrant/.zshrc
+	sed -i 's/plugins=(git)/plugins=(git z)/' /root/.zshrc
+	sed -i 's/plugins=(git)/plugins=(git z)/' /home/vagrant/.zshrc
+
+	echo 'setxkbmap fr' >> /root/.zshrc
+	echo 'setxkbmap fr' >> /home/vagrant/.zshrc
+	echo 'export OPENSSL_CONF=/etc/ssl/' >> /root/.zshrc
+	echo 'export OPENSSL_CONF=/etc/ssl/' >> /home/vagrant/.zshrc
+	echo 'export PATH=$PATH:/root/go/bin' >> /root/.zshrc
+	echo 'export PATH=$PATH:/root/go/bin' >> /home/vagrant/.zshrc
+	echo 'zsh setup'
 }
 
 i=0
@@ -101,7 +148,8 @@ echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /
 apt-get update
 runAptGetUpgrade
 dpkg --configure -a --force-confnew
-runAptGetInstall "aha xalan geany python-pip golang jq phantomjs gdebi tree keepass2"
+runAptGetInstall "aha xalan geany python-pip golang jq gdebi tree keepass2 gcc-9-base gcc"
+installPhantomjs
 mkdir /opt
 cd /opt
 wget https://github.com/gnunn1/tilix/releases/download/1.9.3/tilix.zip
@@ -116,6 +164,8 @@ gzip -d /usr/share/wordlists/rockyou.txt.gz
 mv /usr/share/wordlists/rockyou.txt ./
 cd /opt/joomlavs/
 runAptGetInstall "libssl-dev libffi-dev python-dev build-essential patch ruby-dev zlib1g-dev liblzma-dev libcurl4-openssl-dev"
+pip install wheel
+bundle update --bundler
 gem install bundler && bundle install
 pipInstallBulk
 systemctl start postgresql
@@ -139,10 +189,10 @@ echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' >
 apt-get update
 runAptGetInstall "docker-ce docker-ce-cli containerd.io"
 echo 'export PATH=$PATH:/root/go/bin' >> /root/.bashrc
+echo 'export PATH=$PATH:/root/go/bin' >> /home/vagrant/.bashrc
 systemctl enable docker
 installApkTool
 changeKeyboard
-sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-chsh -s $(which zsh)
-echo "Reboot machine"
-reboot
+zshSetup
+echo "poweroff machine"
+poweroff
