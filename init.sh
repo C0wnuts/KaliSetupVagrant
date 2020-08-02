@@ -30,6 +30,8 @@ function gitCloneBulk()
 	git clone https://github.com/C0wnuts/webExploitPages.git
 	git clone https://github.com/internetwache/GitTools.git /opt/gitTools
 	git clone https://github.com/ticarpi/jwt_tool /opt/jwt_tool
+	git clone https://github.com/21y4d/nmapAutomator.git /opt/nmapAutomator
+	git clone https://github.com/vulnersCom/nmap-vulners.git /opt/nmap-vulners
 }
 
 function runAptGetUpgrade()
@@ -128,6 +130,25 @@ function zshSetup()
 	echo 'zsh setup'
 }
 
+function nmapAutomatorSetup()
+{
+	cd /opt/nmapAutomator
+	chmod +x ./nmapAutomator.sh
+	cd /opt/nmap-vulners
+	cp *.nse /usr/share/nmap/scripts
+	nmap --script-updatedb
+	cd /opt
+	rm -rf /opt/nmap-vulners
+}
+
+function symbolicLinkSetup()
+{
+	ln -s /opt/nmapAutomator/nmapAutomator.sh /usr/bin/nmapAutomator
+	ln -s /opt/joomlavs/joomlavs.rb /usr/bin/joomlavs
+	ln -s /opt/testssl/testssl.sh /usr/bin/testssl
+	ln -s /opt/Sublist3r/sublist3r.py /usr/bin/sublist3r
+}
+
 i=0
 while ((i!=1))
 do
@@ -180,9 +201,7 @@ cd /opt/Empire
 ./setup/install.sh
 cd CrackMapExec && pipenv install
 pipenv run python setup.py install
-ln -s /opt/joomlavs/joomlavs.rb /usr/bin/joomlavs
-ln -s /opt/testssl/testssl.sh /usr/bin/testssl
-ln -s /opt/Sublist3r/sublist3r.py /usr/bin/sublist3r
+nmapAutomatorSetup
 runAptGetInstall "apt-transport-https ca-certificates curl gnupg2 software-properties-common"
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' > /etc/apt/sources.list.d/docker.list
@@ -192,6 +211,7 @@ echo 'export PATH=$PATH:/root/go/bin' >> /root/.bashrc
 echo 'export PATH=$PATH:/root/go/bin' >> /home/vagrant/.bashrc
 systemctl enable docker
 installApkTool
+symbolicLinkSetup
 changeKeyboard
 zshSetup
 echo "poweroff machine"
