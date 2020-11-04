@@ -2,21 +2,21 @@
 
 function gitCloneBulk()
 {
-	git clone https://github.com/superkojiman/onetwopunch.git
+	git clone https://github.com/superkojiman/onetwopunch.git /opt/onetwopunch
 	git clone https://github.com/drwetter/testssl.sh.git /opt/testssl
-	git clone https://github.com/rastating/joomlavs.git
-	git clone https://github.com/aboul3la/Sublist3r.git
-	git clone https://github.com/trustedsec/unicorn
-	git clone https://github.com/Screetsec/Sudomy.git
-	git clone https://github.com/m8r0wn/crosslinked
-	git clone https://github.com/droope/droopescan.git
-	git clone https://github.com/maurosoria/dirsearch.git
-	git clone https://github.com/k4m4/dymerge.git
+	git clone https://github.com/rastating/joomlavs.git /opt/joomlavs
+	git clone https://github.com/aboul3la/Sublist3r.git /opt/Sublist3r
+	git clone https://github.com/trustedsec/unicorn /opt/unicorn
+	git clone https://github.com/Screetsec/Sudomy.git /opt/Sudomy
+	git clone https://github.com/m8r0wn/crosslinked /opt/crosslinked
+	git clone https://github.com/droope/droopescan.git /opt/droopescan
+	git clone https://github.com/maurosoria/dirsearch.git /opt/dirsearch
+	git clone https://github.com/k4m4/dymerge.git /opt/wordlist/dymerge
 	git clone https://github.com/1N3/IntruderPayloads /opt/wordlist/IntruderPayloads
 	git clone https://github.com/C0wnuts/FinalDics.git /opt/wordlist/FinalDics
 	git clone https://github.com/fuzzdb-project/fuzzdb.git /opt/wordlist/fuzzdb
-	git clone --recursive https://github.com/byt3bl33d3r/CrackMapExec /opt/CrackMapExec
-	git clone https://github.com/EmpireProject/Empire.git /opt/Empire
+	git clone https://github.com/danielmiessler/SecLists.git /opt/wordlist/SecList
+	git clone https://github.com/BC-SECURITY/Empire.git /opt/Empire
 	git clone https://github.com/byt3bl33d3r/DeathStar /opt/DeathStar
 	git clone https://github.com/mzet-/linux-exploit-suggester.git /opt/privEscTools/linux-exploit-suggester-sh
 	git clone https://github.com/jondonas/linux-exploit-suggester-2.git /opt/privEscTools/linux-exploit-suggester-pl
@@ -27,11 +27,14 @@ function gitCloneBulk()
 	git clone https://github.com/sleventyeleven/linuxprivchecker.git /opt/privEscTools/linuxprivchecker
 	git clone https://github.com/pentestmonkey/unix-privesc-check.git /opt/privEscTools/unix-privesc-check
 	git clone https://github.com/TH3xACE/SUDO_KILLER.git /opt/privEscTools/SUDO_KILLER
-	git clone https://github.com/C0wnuts/webExploitPages.git
+	git clone https://github.com/C0wnuts/webExploitPages.git /opt/webExploitPages
 	git clone https://github.com/internetwache/GitTools.git /opt/gitTools
 	git clone https://github.com/ticarpi/jwt_tool /opt/jwt_tool
 	git clone https://github.com/21y4d/nmapAutomator.git /opt/nmapAutomator
 	git clone https://github.com/vulnersCom/nmap-vulners.git /opt/nmap-vulners
+	git clone https://github.com/SecureAuthCorp/impacket.git /opt/impacket
+	git clone https://github.com/lgandx/Responder.git /opt/Responder
+	git clone https://github.com/00theway/Ghostcat-CNVD-2020-10487.git /opt/Ghostcat
 }
 
 function runAptGetUpgrade()
@@ -59,7 +62,6 @@ function pipInstallBulk()
 	pip install -r /opt/Sudomy/requirements.txt
 	pip3 install -r /opt/Sudomy/requirements.txt
 	pip3 install -r /opt/DeathStar/requirements.txt
-	pip install -r /opt/CrackMapExec/cme/thirdparty/impacket/requirements.txt
 }
 
 function changeKeyboard()
@@ -149,6 +151,15 @@ function symbolicLinkSetup()
 	ln -s /opt/Sublist3r/sublist3r.py /usr/bin/sublist3r
 }
 
+function crackMapExec()
+{
+	apt remove -y crackmapexec
+	python3 -m pip install pipx
+	pipx ensurepath
+	pipx install crackmapexec
+	pipx ensurepath
+}
+
 i=0
 while ((i!=1))
 do
@@ -169,7 +180,7 @@ echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /
 apt-get update
 runAptGetUpgrade
 dpkg --configure -a --force-confnew
-runAptGetInstall "aha xalan geany python-pip golang jq gdebi tree keepass2 gcc-9-base gcc"
+runAptGetInstall "aha xalan geany golang jq gdebi tree keepass2 gcc-9-base gcc python3-pip"
 installPhantomjs
 mkdir /opt
 cd /opt
@@ -184,7 +195,7 @@ cd /opt/wordlist
 gzip -d /usr/share/wordlists/rockyou.txt.gz
 mv /usr/share/wordlists/rockyou.txt ./
 cd /opt/joomlavs/
-runAptGetInstall "libssl-dev libffi-dev python-dev build-essential patch ruby-dev zlib1g-dev liblzma-dev libcurl4-openssl-dev"
+runAptGetInstall "libssl-dev libffi-dev python-dev build-essential patch ruby-dev zlib1g-dev liblzma-dev libcurl4-openssl-dev python3-venv"
 pip install wheel
 bundle update --bundler
 gem install bundler && bundle install
@@ -198,9 +209,7 @@ go build -o dnssearch main.go
 go get -u github.com/tomnomnom/httprobe
 go get -u github.com/OJ/gobuster
 cd /opt/Empire
-./setup/install.sh
-cd CrackMapExec && pipenv install
-pipenv run python setup.py install
+crackMapExec
 nmapAutomatorSetup
 runAptGetInstall "apt-transport-https ca-certificates curl gnupg2 software-properties-common"
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
