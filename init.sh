@@ -180,7 +180,7 @@ echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /
 apt-get update
 runAptGetUpgrade
 dpkg --configure -a --force-confnew
-runAptGetInstall "aha xalan geany golang jq gdebi tree keepass2 gcc-9-base gcc python3-pip"
+runAptGetInstall "aha xalan geany golang jq gdebi tree keepass2 gcc-9-base gcc python3-pip remmina"
 installPhantomjs
 mkdir /opt
 cd /opt
@@ -211,7 +211,7 @@ go get -u github.com/OJ/gobuster
 cd /opt/Empire
 crackMapExec
 nmapAutomatorSetup
-runAptGetInstall "apt-transport-https ca-certificates curl gnupg2 software-properties-common"
+runAptGetInstall "apt-transport-https ca-certificates curl gnupg2 software-properties-common enum4linux"
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' > /etc/apt/sources.list.d/docker.list
 apt-get update
