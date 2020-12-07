@@ -9,7 +9,6 @@ function gitCloneBulk()
 	git clone https://github.com/trustedsec/unicorn /opt/unicorn
 	git clone https://github.com/Screetsec/Sudomy.git /opt/Sudomy
 	git clone https://github.com/m8r0wn/crosslinked /opt/crosslinked
-	git clone https://github.com/droope/droopescan.git /opt/droopescan
 	git clone https://github.com/maurosoria/dirsearch.git /opt/dirsearch
 	git clone https://github.com/k4m4/dymerge.git /opt/wordlist/dymerge
 	git clone https://github.com/1N3/IntruderPayloads /opt/wordlist/IntruderPayloads
@@ -57,11 +56,11 @@ function pipInstallBulk()
 	pip3 install pipenv
 	pip3 install pycryptodomex
 	pip3 install -r /opt/crosslinked/requirements.txt
-	pip install -r /opt/droopescan/requirements.txt
 	pip install -r /opt/Sublist3r/requirements.txt
 	pip install -r /opt/Sudomy/requirements.txt
 	pip3 install -r /opt/Sudomy/requirements.txt
 	pip3 install -r /opt/DeathStar/requirements.txt
+	pip3 install droopescan
 }
 
 function changeKeyboard()
@@ -215,7 +214,7 @@ runAptGetInstall "apt-transport-https ca-certificates curl gnupg2 software-prope
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' > /etc/apt/sources.list.d/docker.list
 apt-get update
-runAptGetInstall "docker-ce docker-ce-cli containerd.io"
+runAptGetInstall "docker-ce docker-ce-cli containerd.io docker-compose"
 echo 'export PATH=$PATH:/root/go/bin' >> /root/.bashrc
 echo 'export PATH=$PATH:/root/go/bin' >> /home/vagrant/.bashrc
 systemctl enable docker
