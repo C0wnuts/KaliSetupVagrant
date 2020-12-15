@@ -13,7 +13,6 @@ Setup an up to date kali Linux via Vagrant.
 * Droopscan
 * Dirsearch
 * Dymerge
-* Many wordlists (IntruderPayloads,finaldics,fuzzdb)
 * CrackMapExec
 * Empire
 * DeathStare
@@ -26,7 +25,14 @@ Setup an up to date kali Linux via Vagrant.
 * gdebi
 * tree
 * keepass2
+* jwt_tool
+* nmapAutomator
+* SimpleHTTPServer-golang : [Nodauf Repository](https://github.com/nodauf/SimpleHTTPServer-golang)
+* Many wordlists (IntruderPayloads, SecList, finaldics, fuzzdb)
+* Many Web page exploitation (WebShell, reverseShell, dashboard web) : [C0wnuts Repository](https://github.com/C0wnuts/webExploitPages)
+* Many privesc tools (winpeas/lipeas, linuxprivchecker, BeRoot)
 * Many dependencies
+
 
 ## How to use ?
 [RTFM](https://github.com/C0wnuts/KaliSetupVagrant/wiki/How-to-use)

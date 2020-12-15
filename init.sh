@@ -157,6 +157,14 @@ function crackMapExec()
 	pipx ensurepath
 }
 
+function SimpleHTTPServerGolang()
+{
+	mkdir /opt/SimpleHTTPServer-golang
+	cd /opt/SimpleHTTPServer-golang
+	wget https://github.com/nodauf/SimpleHTTPServer-golang/releases/download/v0.5/webserver-linux-amd64
+	chmod +x webserver-linux-amd64
+}
+
 i=0
 while ((i!=1))
 do
@@ -211,6 +219,7 @@ cd /root/go/src/github.com/evilsocket/dnssearch/
 go build -o dnssearch main.go
 go get -u github.com/tomnomnom/httprobe
 go get -u github.com/OJ/gobuster
+SimpleHTTPServerGolang
 crackMapExec
 nmapAutomatorSetup
 runAptGetInstall "apt-transport-https ca-certificates curl gnupg2 software-properties-common enum4linux powershell-empire"
