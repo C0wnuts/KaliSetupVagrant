@@ -15,7 +15,6 @@ function gitCloneBulk()
 	git clone https://github.com/C0wnuts/FinalDics.git /opt/wordlist/FinalDics
 	git clone https://github.com/fuzzdb-project/fuzzdb.git /opt/wordlist/fuzzdb
 	git clone https://github.com/danielmiessler/SecLists.git /opt/wordlist/SecList
-	git clone https://github.com/BC-SECURITY/Empire.git /opt/Empire
 	git clone https://github.com/byt3bl33d3r/DeathStar /opt/DeathStar
 	git clone https://github.com/mzet-/linux-exploit-suggester.git /opt/privEscTools/linux-exploit-suggester-sh
 	git clone https://github.com/jondonas/linux-exploit-suggester-2.git /opt/privEscTools/linux-exploit-suggester-pl
@@ -38,7 +37,7 @@ function gitCloneBulk()
 
 function runAptGetUpgrade()
 {
-    DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' full-upgrade
+    sudo DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y full-upgrade
 
     apt-get autoremove -y
     apt-get clean
@@ -47,7 +46,7 @@ function runAptGetUpgrade()
 
 function runAptGetInstall()
 {
-    DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' install $1
+    DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install $1
 }
 
 function pipInstallBulk()
@@ -147,7 +146,6 @@ function symbolicLinkSetup()
 	ln -s /opt/nmapAutomator/nmapAutomator.sh /usr/bin/nmapAutomator
 	ln -s /opt/joomlavs/joomlavs.rb /usr/bin/joomlavs
 	ln -s /opt/testssl/testssl.sh /usr/bin/testssl
-	ln -s /opt/Sublist3r/sublist3r.py /usr/bin/sublist3r
 }
 
 function crackMapExec()
@@ -155,7 +153,7 @@ function crackMapExec()
 	apt remove -y crackmapexec
 	python3 -m pip install pipx
 	pipx ensurepath
-	pipx install crackmapexec
+	pipx install crackmapexec --force
 	pipx ensurepath
 }
 
@@ -176,6 +174,13 @@ echo "Kill apt process"
 killall apt apt-get > /dev/null 2>&1
 echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" > /etc/apt/sources.list
 echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /etc/apt/sources.list
+
+unset UCF_FORCE_CONFFOLD
+export UCF_FORCE_CONFFNEW=YES
+ucf --purge /boot/grub/menu.lst
+
+export DEBIAN_FRONTEND=noninteractive
+
 apt-get update
 runAptGetUpgrade
 dpkg --configure -a --force-confnew
@@ -207,10 +212,9 @@ cd /root/go/src/github.com/evilsocket/dnssearch/
 go build -o dnssearch main.go
 go get -u github.com/tomnomnom/httprobe
 go get -u github.com/OJ/gobuster
-cd /opt/Empire
 crackMapExec
 nmapAutomatorSetup
-runAptGetInstall "apt-transport-https ca-certificates curl gnupg2 software-properties-common enum4linux"
+runAptGetInstall "apt-transport-https ca-certificates curl gnupg2 software-properties-common enum4linux powershell-empire"
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' > /etc/apt/sources.list.d/docker.list
 apt-get update
