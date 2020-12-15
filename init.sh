@@ -183,7 +183,6 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
 runAptGetUpgrade
-dpkg --configure -a --force-confnew
 runAptGetInstall "aha xalan geany golang jq gdebi tree keepass2 gcc-9-base gcc python3-pip remmina"
 installPhantomjs
 mkdir /opt
