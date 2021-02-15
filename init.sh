@@ -57,14 +57,6 @@ function runAptGetInstall()
     DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install $1
 }
 
-function setupVulnx()
-{
-	cd /opt/web/vulnx
-	chmod +x ./install.sh
-	./install.sh
-	cd /opt
-}
-
 function pipInstallBulk()
 {
 	pip3 install pipenv pycryptodomex termcolor cprint pycryptodomex requests colorama droopescan
@@ -226,7 +218,6 @@ pip install wheel
 bundle update --bundler
 gem install bundler && bundle install
 pipInstallBulk
-setupVulnx
 systemctl start postgresql
 systemctl enable postgresql
 msfdb init
