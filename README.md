@@ -35,7 +35,9 @@ Setup an up to date kali Linux via Vagrant.
 
 
 ## How to use ?
-[RTFM](https://github.com/C0wnuts/KaliSetupVagrant/wiki/How-to-use)
+Vagrant use [RTFM](https://github.com/C0wnuts/KaliSetupVagrant/wiki/How-to-use)
+
+Direct call `bash <(curl -s https://raw.githubusercontent.com/C0wnuts/KaliSetupVagrant/master/setup.sh)`
 
 ## Notes :
 The setup can take 10-30 minutes. Then Take a cup, keep cool and enjoy.
