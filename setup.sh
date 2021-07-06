@@ -73,7 +73,7 @@ function pipInstallBulk()
 function changeKeyboard()
 {
 	echo 'setxkbmap fr' >> /root/.bashrc
-	echo 'setxkbmap fr' >> /home/vagrant/.bashrc
+	echo 'setxkbmap fr' >> /home/kali/.bashrc
 	echo '# KEYBOARD CONFIGURATION FILE' > /etc/default/keyboard
 	echo '' >> /etc/default/keyboard
 	echo '# Consult the keyboard(5) manual page.' >> /etc/default/keyboard
@@ -106,35 +106,25 @@ function installPhantomjs()
 	mv phantomjs-2.1.14 /usr/local/share/
 	ln -sf /usr/local/share/phantomjs-2.1.14/bin/phantomjs /usr/local/bin
 	echo 'export OPENSSL_CONF=/etc/ssl/' >> /root/.bashrc
-	echo 'export OPENSSL_CONF=/etc/ssl/' >> /home/vagrant/.bashrc
+	echo 'export OPENSSL_CONF=/etc/ssl/' >> /home/kali/.bashrc
 	rm 2.1.14.tar.gz
 }
 
 function zshSetup()
 {
-	sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-	chsh -s $(which zsh)
-	mkdir /home/vagrant/.ssh
-	chmod 0700 /home/vagrant/.ssh
-	git clone git://github.com/robbyrussell/oh-my-zsh.git /home/vagrant/.oh-my-zsh
-	chmod 0755 /home/vagrant/.oh-my-zsh
-	cp /home/vagrant/.oh-my-zsh/templates/zshrc.zsh-template /home/vagrant/.zshrc
-	chmod 0755 /home/vagrant/.zshrc
-	chown -R vagrant:vagrant /home/vagrant
-	chsh --shell /bin/zsh vagrant
-
-	sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/' /root/.zshrc
-	sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/' /home/vagrant/.zshrc
-	sed -i 's/plugins=(git)/plugins=(git z)/' /root/.zshrc
-	sed -i 's/plugins=(git)/plugins=(git z)/' /home/vagrant/.zshrc
-
 	echo 'setxkbmap fr' >> /root/.zshrc
-	echo 'setxkbmap fr' >> /home/vagrant/.zshrc
+	echo 'setxkbmap fr' >> /home/kali/.zshrc
 	echo 'export OPENSSL_CONF=/etc/ssl/' >> /root/.zshrc
-	echo 'export OPENSSL_CONF=/etc/ssl/' >> /home/vagrant/.zshrc
+	echo 'export OPENSSL_CONF=/etc/ssl/' >> /home/kali/.zshrc
 	echo 'export PATH=$PATH:/root/go/bin' >> /root/.zshrc
-	echo 'export PATH=$PATH:/root/go/bin' >> /home/vagrant/.zshrc
+	echo 'export PATH=$PATH:/root/go/bin' >> /home/kali/.zshrc
 	echo 'zsh setup'
+}
+
+function dpkgSetup()
+{
+	dpkg --configure -a --force-confnew
+	pipx ensurepath
 }
 
 function nmapAutomatorSetup()
@@ -170,10 +160,19 @@ function deathStar()
 	sudo python3 -m pipx ensurepath
 }
 
+function vulnx()
+{
+	cd /opt/web/vulnx
+	chmod +x ./install.sh
+	./install.sh
+}
+
 function initopt()
 {
 	mkdir /opt /opt/web /opt/internal /opt/privEscTools /opt/wordlist /opt/osint
 }
+
+setxkbmap fr
 
 i=0
 while ((i!=1))
@@ -210,6 +209,7 @@ sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
 rm tilix.zip
 gitCloneBulk
 deathStar
+vulnx
 gzip -d /usr/share/wordlists/rockyou.txt.gz
 cp /usr/share/wordlists/rockyou.txt /opt/wordlist/
 cd /opt/web/joomlavs/
@@ -234,11 +234,12 @@ echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' >
 apt-get update
 runAptGetInstall "docker-ce docker-ce-cli containerd.io docker-compose"
 echo 'export PATH=$PATH:/root/go/bin' >> /root/.bashrc
-echo 'export PATH=$PATH:/root/go/bin' >> /home/vagrant/.bashrc
+echo 'export PATH=$PATH:/root/go/bin' >> /home/kali/.bashrc
 systemctl enable docker
 installApkTool
 symbolicLinkSetup
 changeKeyboard
 zshSetup
-echo "poweroff machine"
-poweroff
+dpkgSetup
+echo "reboot machine"
+reboot
